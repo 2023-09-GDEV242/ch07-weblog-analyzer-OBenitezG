@@ -10,6 +10,13 @@ public class LogAnalyzer
     private int[] hourCounts;
     // Use a LogfileReader to access the data.
     private LogfileReader reader;
+    
+    //Exercise 7.19:
+    private LogfileReader dayReader;
+    private LogfileReader monthReader;
+    
+    private int[] dayCounts;
+    private int[] monthCounts;
 
     /**
      * Create an object to analyze hourly web accesses.
@@ -19,9 +26,18 @@ public class LogAnalyzer
         // Create the array object to hold the hourly
         // access counts.
         hourCounts = new int[24];
+        
+        //Exercise 7.19:
+        dayCounts = new int[32];
+        monthCounts = new int[13];
+        
         // Create the reader to obtain the data.
         //Exercise 7.12: Modify the LogAnalyzer Class:
         reader = new LogfileReader("demoLog.txt");
+        
+        //Exercise 7.19:
+        dayReader = new LogfileReader("demoLog.txt");
+        monthReader = new LogfileReader("demoLog.txt");
     }
 
     /**
@@ -33,6 +49,32 @@ public class LogAnalyzer
             LogEntry entry = reader.next();
             int hour = entry.getHour();
             hourCounts[hour]++;
+        }
+    }
+    
+    /**
+     * Exercise 7.19:
+     * Analyze the daily access data from the log file.
+     */
+    public void analyzeDailyData()
+    {
+        while(dayReader.hasNext()) {
+            LogEntry entry = dayReader.next();
+            int day = entry.getDay();
+            dayCounts[day]++;
+        }
+    }
+    
+    /**
+     * Exercise 7.19:
+     * Analyze the monthly access data from the log file.
+     */
+    public void analyzeMonthlyData()
+    {
+        while(monthReader.hasNext()) {
+            LogEntry entry = monthReader.next();
+            int month = entry.getMonth();
+            monthCounts[month]++;
         }
     }
 
@@ -74,6 +116,7 @@ public class LogAnalyzer
         }
 
         //Returns that total to the user.
+        System.out.println("Number of accessers are " + total);
         return total;
     }
 
@@ -100,6 +143,8 @@ public class LogAnalyzer
         }
 
         //After the array has been checked, return the highest hour
+        System.out.println("The highest hour: " + highestHour + " with " + highestCount
+                            + " visitors.");
         return highestHour;
     }
 
@@ -126,6 +171,8 @@ public class LogAnalyzer
         }
 
         //After the array has been checked, return the lowest hour
+        System.out.println("The lowest hour: " + lowestHour + " with " + lowestCount 
+                            + " visitors.");
         return lowestHour;
     }
 
@@ -154,7 +201,79 @@ public class LogAnalyzer
         }
         
         //After the array has been checked, return the highest hour
+        System.out.println("The highest two hour period: " + highestHour + " with " 
+                            + highestCount + " visitors.");
         return highestHour;
     }
+    
+    /**
+     * Exercise 7.19:
+     * Comapers every day to find which has the lowest count
+     *
+     * @return    The lowest count day
+     */
+    public int quitestDay()
+    {
+        //Two variables to compare lowest value to
+        int lowestCount = dayCounts[1];
+        int lowestDay = 1;
 
+        //For loop to check every index
+        for (int index = 1; index < hourCounts.length; index++) {
+            //Compares the value of the day to the newest lowest count
+            if (dayCounts[index] < lowestCount && dayCounts[index] > 0) {
+                //If the new lowest count beats the old one, replace all info with its.
+                lowestCount = dayCounts[index];
+                lowestDay = index;
+            }
+        }
+
+        //After the array has been checked, return the lowest day
+        System.out.println("The lowest day: " + lowestDay + " with " + lowestCount 
+                            + " visitors.");
+        return lowestDay;
+    }
+    
+    /**
+     * Exercise 7.19:
+     * Comapers every day to find which has the highest count
+     *
+     * @return    The highest count day
+     */
+    public int busiestDay()
+    {
+        //Two variables to compare highest value to
+        int highestCount = 0;
+        int highestDay = 1;
+
+        //For loop to check every index
+        for (int index = 1; index < dayCounts.length; index++) {
+            //Compares the value of the hour to the newest highest count
+            if (dayCounts[index] > highestCount) {
+                //If the new highest count beats the old one, replace all info with its.
+                highestCount = dayCounts[index];
+                highestDay = index;
+            }
+        }
+
+        //After the array has been checked, return the highest day
+        System.out.println("The highest day: " + highestDay + " with " + highestCount
+                            + " visitors.");
+        return highestDay;
+    }
+    
+    /**
+     * Exercise 7.19:
+     * Returns the number of monthly accesses recorded in the log file
+     *
+     * @return    The total of accessesss per month
+     */
+    public void numberOfMonthlyAccessess()
+    {
+        //For loop to go over every month starting on the first month
+        for (int index = 1; index < monthCounts.length; index++) {
+            //Prints out the month and the visitors
+            System.out.println("Month " + index + ": " + monthCounts[index] + " accessess");
+        }
+    }
 }
