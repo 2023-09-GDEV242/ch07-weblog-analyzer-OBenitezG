@@ -33,11 +33,11 @@ public class LogAnalyzer
         
         // Create the reader to obtain the data.
         //Exercise 7.12: Modify the LogAnalyzer Class:
-        reader = new LogfileReader("demoLog.txt");
+        reader = new LogfileReader("demoLog2.txt");
         
         //Exercise 7.19:
-        dayReader = new LogfileReader("demoLog.txt");
-        monthReader = new LogfileReader("demoLog.txt");
+        dayReader = new LogfileReader("demoLog2.txt");
+        monthReader = new LogfileReader("demoLog2.txt");
     }
 
     /**
@@ -187,11 +187,16 @@ public class LogAnalyzer
         //Two variables to compare highest value to
         int highestCount = hourCounts[0] + hourCounts[1];
         int highestHour = 0;
+        int checkCount;
         
-        //For loop to check every index, then add 2 to skip 1
-        for (int index = 0; index < hourCounts.length; index += 2) {
-            //current index value is added with its next index to compare its score
-            int checkCount = hourCounts[index] + hourCounts[index + 1];
+        //For loop to check every index
+        for (int index = 0; index < hourCounts.length; index++) {
+            if (index == 23) {
+                checkCount = hourCounts[index] + hourCounts[0];
+            } else {
+                //current index value is added with its next index to compare its score
+                checkCount = hourCounts[index] + hourCounts[index + 1];
+            }
                 //Compares the value of the hour to the newest highest count
                 if (checkCount > highestCount) {
                     //If the new highest count beats the old one, replace all info with its.
@@ -274,6 +279,80 @@ public class LogAnalyzer
         for (int index = 1; index < monthCounts.length; index++) {
             //Prints out the month and the visitors
             System.out.println("Month " + index + ": " + monthCounts[index] + " accessess");
+        }
+    }
+    
+    /**
+     * Exercise 7.19:
+     * Comapers every month to find which has the lowest count
+     *
+     * @return    The lowest count month
+     */
+    public int quitestMonth()
+    {
+        //Two variables to compare lowest value to
+        int lowestCount = monthCounts[1];
+        int lowestMonth = 1;
+
+        //For loop to check every index
+        for (int index = 1; index < monthCounts.length; index++) {
+            //Compares the value of the day to the newest lowest count
+            if (monthCounts[index] < lowestCount && monthCounts[index] > 0) {
+                //If the new lowest count beats the old one, replace all info with its.
+                lowestCount = monthCounts[index];
+                lowestMonth = index;
+            }
+        }
+
+        //After the array has been checked, return the lowest month
+        System.out.println("The lowest day: " + lowestMonth + " with " + lowestCount 
+                            + " visitors.");
+        return lowestMonth;
+    }
+    
+    /**
+     * Exercise 7.19:
+     * Comapers every month to find which has the highest count
+     *
+     * @return    The highest count month
+     */
+    public int busiestMonth()
+    {
+        //Two variables to compare highest value to
+        int highestCount = 0;
+        int highestMonth = 1;
+
+        //For loop to check every index
+        for (int index = 1; index < monthCounts.length; index++) {
+            //Compares the value of the hour to the newest highest count
+            if (monthCounts[index] > highestCount) {
+                //If the new highest count beats the old one, replace all info with its.
+                highestCount = monthCounts[index];
+                highestMonth = index;
+            }
+        }
+
+        //After the array has been checked, return the highest day
+        System.out.println("The highest day: " + highestMonth + " with " + highestCount
+                            + " visitors.");
+        return highestMonth;
+    }
+    
+    /**
+     * Exercise 7.19:
+     * Returns the number of average monthly accesses recorded in the log file
+     *
+     * @return    The average of accessesss per month
+     */
+    public void numberOfAverageMonthlyAccessess()
+    {
+        //For loop to go over every month starting on the first month
+        for (int index = 1; index < monthCounts.length; index++) {
+            //There are 5 years, so each month is repeated 5 times.
+            int monthlyAverage = monthCounts[index] / 5;
+            
+            //Prints out the month and the visitors
+            System.out.println("Month " + index + ": " + monthlyAverage + " accessess");
         }
     }
 }
